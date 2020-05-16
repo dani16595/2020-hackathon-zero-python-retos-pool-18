@@ -7,6 +7,12 @@ options = ["Piedra", "Papel", "Tijeras"]
 #'Ganaste!'
 #'Perdiste!'
 def quienGana(player, ai):
+    """
+    It says the result of the game
+    :param player: string player's move ["Piedra", "Papel", "Tijeras"]
+    :param ai: string ai's move ["Piedra", "Papel", "Tijeras"]
+    :return: result ['Empate!','Ganaste!','Perdiste!']
+    """
     player=player.lower()
     ai=ai.lower()
     if(player==ai):
