@@ -13,31 +13,40 @@ class Snake():
 
     # Manejo del pressed [KEYDOWN] de las teclas [K_RIGHT - K_LEFT - K_UP -K_DOWN ]
     def controller(self, event, pygame):
-        
     # Controla el cambio de  las direcciones
     # Orientaciones
     # Vertical      -> Movimientos [RIGHT - LEFT]
     # Horizontal    -> Movimientos [UP - DOWN]
-    # Incremento del movimiento 
+    # Incremento del movimiento
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_UP:
+                self.change = "UP"
+            elif event.key == pygame.K_DOWN:
+                self.change = "DOWN"
+            elif event.key == pygame.K_RIGHT:
+                self.change = "RIGHT"
+            elif event.key == pygame.K_LEFT:
+                self.change = "LEFT"
+
+
     def changeDirection(self):
-        #
-        #
-        #
-        #
-        #
-        #
-        #
-        #
+        if self.change == 'UP' and self.direction != 'DOWN':
+            self.direction = 'UP'
+        if self.change == 'DOWN' and self.direction != 'UP':
+            self.direction = 'DOWN'
+        if self.change == 'LEFT' and self.direction != 'RIGHT':
+            self.direction = 'LEFT'
+        if self.change == 'RIGHT' and self.direction != 'LEFT':
+            self.direction = 'RIGHT'
 
-        #
-        #
-        #
-        #
-        #
-        #
-        #
-        #
-
+        if self.direction == "LEFT":
+            self.position[0] -= 10
+        if self.direction == "RIGHT":
+            self.position[0] += 10
+        if self.direction == "UP":
+            self.position[1] -= 10
+        if self.direction == "DOWN":
+            self.position[1] += 10
         self.body.insert(0, list(self.position))
 
 class Game():
@@ -50,47 +59,45 @@ class Game():
 
     # función de salida
     def exit(self, event, pygame):
-        #
-        #
-    
-    # Posición aleatorio entre el ranto [0,49] * 10  
+        if event.type == pygame.QUIT:
+            self.run = False
+    # Posición aleatorio entre el ranto [0,49] * 10
     def food_spawn(self):
-        self.food_pos = 0
+        self.food_pos = [random.randrange(0,49)*10,random.randrange(0,49)*10]
+
+
 
     # Si colisionas con una fruta, sumas 1
     # Sino decrementas en 1 el body del snake
     def eat(self, snake):
-        #
-        #    
-        #    
-        #
-        #  
+        if(snake.position==[self.food_pos[0],self.food_pos[1]]):
+            self.score += 1
+            self.food_spawn()
+        else:
+            snake.body.pop()
+
+
 
     # Mensajes de salida cuando el snake muere
     # Posición snake[0] >= 500 ó snake[0] <= 0                  -> Muere
     # Posición snake[1] >= 500 ó snake[1] <= 0                  -> Muere
-    # Posición del snake choca con sigo mismo menos la cabeza   -> Muere 
+    # Posición del snake choca con sigo mismo menos la cabeza   -> Muere
     def dead(self, snake):
-        #
-        #
-        #
-        
-        #
-        #
-        #
-        
-        #
-        #
-        #
-        
-            
+        if snake.position[0]<=0 or snake.position[0]>500-10:
+            self.run = False
+        if snake.position[1]<=0 or snake.position[1]>500-10:
+            self.run = False
+        for block in snake.body[1:]:
+            if snake.position==block:
+                self.run = False
+
 # Entry Point
 def main():
     # Descomentar para lanzar el juego en local
     # Comentar para validar con el oráculo
-    # pygame.init()
-    # play_surface = pygame.display.set_mode((500, 500))
-    # fps = pygame.time.Clock()
+    pygame.init()
+    play_surface = pygame.display.set_mode((500, 500))
+    fps = pygame.time.Clock()
 
     snake = Snake()
     game = Game()
@@ -100,7 +107,7 @@ def main():
         for event in pygame.event.get():
             game.exit(event, pygame)
             snake.controller(event, pygame)
-        
+
         snake.changeDirection()
 
         game.eat(snake)
@@ -117,9 +124,9 @@ def main():
         pygame.display.flip()
         fps.tick(60)
 
-        
+
 # Comienza la aventura!!!!
 # Descomentar para lanzar el juego en local
 # Comentar para validar con el oráculo
-# main()
-# pygame.quit()
+main()
+pygame.quit()
